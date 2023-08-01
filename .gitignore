@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+
+.idea
+.vscode
+
+/.data
+
+node_modules
