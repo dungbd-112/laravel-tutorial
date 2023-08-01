@@ -10,4 +10,14 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    /**
+     * Require Bearer token.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('jwtauth', ['except' => ['login', 'register', 'refresh']]);
+    }
 }
