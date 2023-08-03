@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('name')->require();
             $table->string('email')->unique();
             $table->string('password')->require();
-            $table->rememberToken();
+            $table->unsignedInteger('role')->default(UserRole::Admin)->comment('0: ADMIN, 1: USER');
+            $table->rememberToken()->nullable();
             $table->timestamps();
         });
     }

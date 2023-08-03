@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\StoryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/* Auth router */
 Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout',  [AuthController::class, 'logout']);
@@ -23,7 +25,11 @@ Route::group(['prefix' => 'auth'], function ($router) {
     Route::get('me',  [AuthController::class, 'me']);
 });
 
-Route::resource('users', UserController::class);
+/* User router */
+Route::apiResource('users', UserController::class);
 Route::group(['prefix' => 'users'], function ($router) {
     Route::post('register', [UserController::class, 'register']);
 });
+
+/* Story router */
+Route::apiResource('stories', StoryController::class);

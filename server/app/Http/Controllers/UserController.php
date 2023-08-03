@@ -38,7 +38,6 @@ class UserController extends Controller
             'password' => $hashedPassword,
         ]);
 
-
         return response()->json([
             'success' => true,
             'message' => 'Create new account successfully !',
