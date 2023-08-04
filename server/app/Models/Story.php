@@ -24,10 +24,7 @@ class Story extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
+    protected $hidden = [];
 
     
     /*
@@ -35,7 +32,6 @@ class Story extends Model
     */
     public function pages()
     {
-        return $this->hasManyThrough(Sentence::class, Page::class, 'story_id', 'page_id', 'id', 'id');
-        // return $this->hasMany(Page::class, 'story_id', 'id');
+        return $this->hasMany(Page::class, 'story_id', 'id');
     }
 }

@@ -60,6 +60,7 @@ class StoreUserRequest extends FormRequest
             'required' => ':attribute field is required.',
             'email' => 'Invalid email address.',
             'unique' => 'Email address already used.',
+            'max:255' => 'The :attribute field must be less than :max characters.',
         ];
     }
 

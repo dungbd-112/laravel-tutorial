@@ -25,10 +25,7 @@ class Sentence extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
+    protected $hidden = [];
 
     /**
      * Get the page that owns the sentence.

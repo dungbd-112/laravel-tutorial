@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ResponseStatus;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -32,16 +33,15 @@ class UserController extends Controller
 
         $hashedPassword = Hash::make($credentials['password']);
 
-        User::create([
+        $user = User::create([
             'name' => $credentials['name'],
             'email' => $credentials['email'],
             'password' => $hashedPassword,
         ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Create new account successfully !',
-        ]);
+        $this->status = ResponseStatus::Success;
+        $this->message = 'Create new account successfully !';
+        return $this->response($user ?? []);
     }
 
     /**

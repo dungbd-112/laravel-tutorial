@@ -24,10 +24,7 @@ class Page extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
+    protected $hidden = [];
 
     /**
      * Get the sentences for the page.

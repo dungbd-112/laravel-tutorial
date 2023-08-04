@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ResponseStatus;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -12,13 +13,15 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    // Define default response values.
+    protected $message = '';
+    protected $status = ResponseStatus::Fail;
+
     /**
      * Require Bearer token.
      *
      * @return void
      */
-    protected $message = '';
-    protected $status = 'fail';
     public function __construct()
     {
         $this->middleware('jwtauth', ['except' => ['login', 'register', 'refresh']]);
@@ -33,7 +36,7 @@ class Controller extends BaseController
     protected function response($data): JsonResponse
     {
         return response()->json([
-            'success' => $this->status,
+            'status' => $this->status,
             'data' => $data,
             'message' => $this->message,
         ]);
