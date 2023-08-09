@@ -5,17 +5,17 @@ namespace App\Http\Controllers;
 use App\Enums\ResponseStatus;
 use App\Http\Requests\StoreStoryRequest;
 use App\Http\Requests\UpdateStoryRequest;
-use App\Models\Story;
+use App\Repository\Story\StoryRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 
 class StoryController extends Controller
 {
-    public function __construct()
+    private $storyRepository;
+
+    public function __construct(StoryRepositoryInterface $storyRepository)
     {
-        $this->authorizeResource(Story::class);
+        $this->storyRepository = $storyRepository;
     }
 
     /**
@@ -25,12 +25,10 @@ class StoryController extends Controller
      * @return JsonResponse
      */
     public function index(Request $request): JsonResponse
-    {   
-        $story = Story::where('title', 'like', '%'.$request->title.'%')
-                        ->get()
-                        ->sortByDesc('created_at');
+    {
+        $stories = $this->storyRepository->searchByTitle($request);
 
-        if(!isset($story) || $story->isEmpty()) {
+        if(!isset($stories) || $stories->isEmpty()) {
             $this->message = 'No story found.';
             goto next;
         }
@@ -38,7 +36,7 @@ class StoryController extends Controller
         $this->status = ResponseStatus::Success;
         $this->message = 'Get all stories successfully.';
         next:
-        return $this->response($story ?? []);
+        return $this->response($stories ?? []);
     }
 
     /**
@@ -49,17 +47,13 @@ class StoryController extends Controller
      */
     public function store(StoreStoryRequest $request): JsonResponse
     {
+        $this->authorize('create', Story::class);
         $request->all();
 
-        try {
-            $story = Story::create([
-                'title' => $request->title,
-                'created_user' => auth()->user()->id,
-            ]);
-            
-            $this->updatePages($story, $request->pages);
-        } catch (\Throwable $e) {
-            $this->message = $e;
+        $story = $this->storyRepository->createStoryAndContent($request);
+
+        if(!$story) {
+            $this->message = 'Create new story failed.';
             goto next;
         }
 
@@ -77,16 +71,12 @@ class StoryController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $story = Story::with(['pages' => function($query) {
-            $query->select('id', 'page_number', 'story_id');
-        }])->find($id);
+        $story = $this->storyRepository->getStoryDetail($id);
 
-        if(!$story) {
+        if(!$story || !isset($story)) {
             $this->message = 'Story not found.';
             goto next;
         }
-
-        $this->getSentencesAndObjectsInPage($story->pages);
 
         $this->status = ResponseStatus::Success;
         $this->message = 'Get story successfully.';
@@ -103,24 +93,13 @@ class StoryController extends Controller
      */
     public function update(UpdateStoryRequest $request, $id): JsonResponse
     {
+        $this->authorize('update', Story::class);
         $request->all();
 
-        $story = Story::find($id);
+        $story = $this->storyRepository->updateStoryAndContent($request, $id);
 
         if(!$story) {
             $this->message = 'Story not found.';
-            goto next;
-        }
-
-        try {
-            $story->title = $request->title ?? $story->title;
-            $story->save();
-
-            if($request->pages) {
-                $this->updatePages($story, $request->pages);
-            }
-        } catch (\Throwable $e) {
-            $this->message = $e;
             goto next;
         }
 
@@ -134,85 +113,21 @@ class StoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
-        $story = Story::find($id);
+        $this->authorize('delete', Story::class);
+        $result = $this->storyRepository->deleteStoryAndContent($id);
 
-        if(!$story) {
+        if(!$result) {
             $this->message = 'Story not found.';
             goto next;
         }
-
-        try {
-            $pages = $story->pages;
-
-            $story->delete();
-            foreach($pages as $page) {
-                $page->sentences()->delete();
-                $page->objects()->delete();
-            }
-        } catch (\Throwable $e) {
-            $this->message = $e;
-            goto next;
-        }
-
 
         $this->status = ResponseStatus::Success;
         $this->message = 'Delete story successfully.';
         next:
         return $this->response([]);
-    }
-
-    /**
-     * Get the specified sentences and objects in a page.
-     *
-     * @param  Object $pages
-     * @return Object
-     */
-    private function getSentencesAndObjectsInPage($pages): Object
-    {
-        $pageIds = Arr::pluck($pages, 'id');
-
-        $sentences = DB::table('sentences')
-                        ->select('page_id', 'content', 'audio_url')
-                        ->whereIn('page_id', $pageIds)
-                        ->get()
-                        ->groupBy('page_id');
-                        
-        $objects = DB::table('objects')
-                        ->select('page_id', 'content', 'audio_url', 'image_url')
-                        ->whereIn('page_id', $pageIds)
-                        ->get()
-                        ->groupBy('page_id');
-        
-        foreach($pages as $page) {
-            $page->sentences = $sentences[$page->id] ?? [];
-            $page->objects = $objects[$page->id] ?? [];
-        }
-
-        return $pages;
-    }
-
-    /**
-     * Update pages of a story.
-     * 
-     * @param  Object $story
-     * @param  Array $pages
-     * @return void
-    */
-    private function updatePages($story, $pages): void
-    {
-        $story->pages()->delete();
-
-        foreach($pages as $page) {
-            $newPage = $story->pages()->create([
-                'page_number' => $page['page_number'],
-            ]);
-
-            $newPage->sentences()->createMany($page['sentences']);
-            $newPage->objects()->createMany($page['objects']);
-        }
     }
 }

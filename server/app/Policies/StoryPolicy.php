@@ -40,9 +40,9 @@ class StoryPolicy
      *
      * @return JsonResponse|bool
      */
-    public function create()
+    public function create(User $user)
     {
-        return auth()->user()->role === UserRole::Admin;
+        return $user->isAdmin();
     }
 
     /**
@@ -50,9 +50,9 @@ class StoryPolicy
      *
      * @return bool
      */
-    public function update()
+    public function update(User $user)
     {
-        return auth()->user()->role === UserRole::Admin;
+        return $user->isAdmin();
     }
 
     /**
@@ -60,9 +60,9 @@ class StoryPolicy
      *
      * @return bool
      */
-    public function delete()
+    public function delete(User $user)
     {
-        return auth()->user()->role === UserRole::Admin;
+        return $user->isAdmin();
     }
 
     /**

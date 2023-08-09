@@ -26,7 +26,6 @@ class Story extends Model
      */
     protected $hidden = [];
 
-    
     /*
     * Get the pages for the story.
     */

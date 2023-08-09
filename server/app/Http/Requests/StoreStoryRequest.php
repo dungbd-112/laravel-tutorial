@@ -30,10 +30,12 @@ class StoreStoryRequest extends FormRequest
     {
         return [
             'title' => [
+                'bail',
                 'required',
                 'max:255',
             ],
             'pages' => [
+                'bail',
                 'required',
                 'array',
                 'min:1',

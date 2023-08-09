@@ -5,12 +5,20 @@ namespace App\Http\Controllers;
 use App\Enums\ResponseStatus;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
+use App\Repository\User\UserRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    private UserRepositoryInterface $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -33,14 +41,20 @@ class UserController extends Controller
 
         $hashedPassword = Hash::make($credentials['password']);
 
-        $user = User::create([
+        $user = $this->userRepository->create([
             'name' => $credentials['name'],
             'email' => $credentials['email'],
             'password' => $hashedPassword,
         ]);
 
+        if(!$user) {
+            $this->message = 'Create new account failed !';
+            goto next;
+        }
+
         $this->status = ResponseStatus::Success;
         $this->message = 'Create new account successfully !';
+        next:
         return $this->response($user ?? []);
     }
 
