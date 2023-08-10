@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PageSeeder::class);
         $this->call(SentenceSeeder::class);
         $this->call(PageObjectSeeder::class);
+        $this->call(SentenceConfigSeeder::class);
     }
 }

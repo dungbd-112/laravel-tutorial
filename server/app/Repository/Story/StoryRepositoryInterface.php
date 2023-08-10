@@ -40,13 +40,6 @@ interface StoryRepositoryInterface extends EloquentRepositoryInterface
     public function updateStoryAndContent($request, $id);
 
     /**
-     * Get the specified sentences and objects in a page.
-     *
-     * @param  Object $pages
-     */
-    public function getSentencesAndObjectsInPage($pages);
-
-    /**
      * Update pages of a story.
      *
      * @param  Object $story

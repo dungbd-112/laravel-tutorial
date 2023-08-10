@@ -15,10 +15,9 @@ class CreateObjectsTable extends Migration
     {
         Schema::create('objects', function (Blueprint $table) {
             $table->id();
-            $table->string('content');
-            $table->string('audio_url');
-            $table->string('image_url');
             $table->unsignedBigInteger('page_id');
+            $table->unsignedBigInteger('sentence_id');
+            $table->string('zone');
             $table->timestamps();
         });
     }

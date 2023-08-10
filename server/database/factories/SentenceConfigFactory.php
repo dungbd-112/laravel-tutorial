@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PageObjectFactory extends Factory
+class SentenceConfigFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -15,7 +15,7 @@ class PageObjectFactory extends Factory
     {
         return [
             'sentence_id' => $this->faker->unique(true)->numberBetween(1, 500),
-            'zone' => '1,2,3,4',
+            'position' => '1,2',
         ];
     }
 }

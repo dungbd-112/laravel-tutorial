@@ -16,7 +16,7 @@ class Page extends Model
      */
     protected $fillable = [
         'story_id',
-        'page_number',
+        'background_url',
     ];
 
     /**
@@ -27,26 +27,26 @@ class Page extends Model
     protected $hidden = [];
 
     /**
-     * Get the sentences for the page.
-    */
-    public function sentences()
-    {
-        return $this->hasMany(Sentence::class, 'page_id', 'id');
-    }
-
-    /**
-     * Get the objects for the page.
-    */
-    public function objects()
-    {
-        return $this->hasMany(PageObject::class, 'page_id', 'id');
-    }
-
-    /**
      * Get page's story.
     */
     public function story()
     {
         return $this->belongsTo(Story::class, 'story_id', 'id');
+    }
+
+    /**
+     * Get all page's sentences.
+    */
+    public function sentences()
+    {
+        return $this->hasManyThrough(Sentence::class, SentenceConfig::class, 'page_id', 'id', 'id', 'sentence_id');
+    }
+
+    /**
+     * Get all page's objects.
+    */
+    public function objects()
+    {
+        return $this->hasManyThrough(Sentence::class, PageObject::class, 'page_id', 'id', 'id', 'sentence_id');
     }
 }

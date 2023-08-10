@@ -15,7 +15,6 @@ class Sentence extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'page_id',
         'content',
         'audio_url',
     ];
@@ -28,10 +27,18 @@ class Sentence extends Model
     protected $hidden = [];
 
     /**
-     * Get the page that owns the sentence.
+     * Get the page for the sentence.
     */
-    public function page()
+    public function objects()
     {
-        return $this->belongsTo(Page::class, 'page_id', 'id');
+        return $this->hasMany(PageObject::class, 'sentence_id', 'id');
+    }
+
+    /**
+     * Get the page for the sentence.
+    */
+    public function sentenceConfigs()
+    {
+        return $this->hasMany(SentenceConfig::class, 'sentence_id', 'id');
     }
 }

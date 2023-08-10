@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStoriesTable extends Migration
+class CreateSentenceConfigTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateStoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('stories', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->string('thumbnail_url');
-            $table->bigInteger('bonus');
-            $table->unsignedBigInteger('created_user');
+        Schema::create('sentence_config', function (Blueprint $table) {
+            $table->unsignedBigInteger('page_id');
+            $table->unsignedBigInteger('sentence_id');
+            $table->string('position');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateStoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stories');
+        Schema::dropIfExists('sentence_config');
     }
 }

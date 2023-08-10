@@ -17,7 +17,6 @@ class CreateSentencesTable extends Migration
             $table->id();
             $table->string('content');
             $table->string('audio_url');
-            $table->unsignedBigInteger('page_id');
             $table->timestamps();
         });
     }

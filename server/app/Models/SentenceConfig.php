@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PageObject extends Model
+class SentenceConfig extends Model
 {
     use HasFactory;
 
-    protected $table = 'objects';
+    protected $table = 'sentence_config';
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +19,7 @@ class PageObject extends Model
     protected $fillable = [
         'page_id',
         'sentence_id',
-        'zone',
+        'position',
     ];
 
     /**
@@ -30,7 +30,7 @@ class PageObject extends Model
     protected $hidden = [];
 
     /**
-     * Get the objectes for the page.
+     * Get the sentences for the page.
     */
     public function page()
     {
@@ -38,7 +38,7 @@ class PageObject extends Model
     }
 
     /**
-     * Get the objectes for the sentence.
+     * Get the content for the sentence.
     */
     public function sentence()
     {

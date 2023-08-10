@@ -34,6 +34,15 @@ class StoreStoryRequest extends FormRequest
                 'required',
                 'max:255',
             ],
+            'thumbnail' => [
+                'bail',
+                'required',
+                'file',
+            ],
+            'bonus' => [
+                'bail',
+                'required',
+            ],
             'pages' => [
                 'bail',
                 'required',
@@ -45,7 +54,7 @@ class StoreStoryRequest extends FormRequest
 
     /**
      * Custom message for validation
-     * 
+     *
      * @return array
     */
     public function messages(): array
@@ -60,10 +69,10 @@ class StoreStoryRequest extends FormRequest
 
     /**
      * Custom validation error response
-     * 
+     *
      * @return void
     */
-    protected function failedValidation(Validator $validator) 
+    protected function failedValidation(Validator $validator)
     {
         $errors = (new ValidationException($validator))->errors();
         throw new HttpResponseException(response()->json(

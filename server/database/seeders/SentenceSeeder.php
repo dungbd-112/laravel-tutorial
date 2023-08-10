@@ -14,6 +14,6 @@ class SentenceSeeder extends Seeder
      */
     public function run()
     {
-        Sentence::factory()->count(499)->create();
+        Sentence::factory()->count(500)->create();
     }
 }

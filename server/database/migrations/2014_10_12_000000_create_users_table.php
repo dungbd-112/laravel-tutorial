@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('name')->require();
             $table->string('email')->unique();
             $table->string('password')->require();
+            $table->bigInteger('point')->nullable()->default(0);
             $table->unsignedInteger('role')->default(UserRole::Admin)->comment('0: ADMIN, 1: USER');
             $table->rememberToken()->nullable();
             $table->timestamps();

@@ -127,6 +127,6 @@ class StoryController extends Controller
         $this->status = ResponseStatus::Success;
         $this->message = 'Delete story successfully.';
         next:
-        return $this->response([]);
+        return $this->response($result ?? []);
     }
 }

@@ -21,4 +21,11 @@ interface ObjectRepositoryInterface extends EloquentRepositoryInterface
      * @param array $objects
     */
     public function storeContentAndCreateObject($storyId, $pageId, $objects);
+
+    /**
+     * Delete object image, audio and object
+     *
+     * @param int $pageId
+    */
+    public function deleteObjects($pageId);
 }

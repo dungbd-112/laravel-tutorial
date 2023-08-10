@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\PageObject;
+use App\Models\SentenceConfig;
 use Illuminate\Database\Seeder;
 
-class PageObjectSeeder extends Seeder
+class SentenceConfigSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +15,7 @@ class PageObjectSeeder extends Seeder
     public function run()
     {
         for($page_id = 1; $page_id <= 500; $page_id++) {
-            PageObject::factory(3)->create([
+            SentenceConfig::factory(3)->create([
                 'page_id' => $page_id,
             ]);
         }

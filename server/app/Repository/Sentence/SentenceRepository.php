@@ -18,33 +18,35 @@ class SentenceRepository extends BaseRepository implements SentenceRepositoryInt
         parent::__construct($model);
     }
 
-    public function getSentencesContent($pageIds)
+    public function storeContentAndCreateSentence($storyId, $pageId, $sentence)
     {
-        $sentences = $this->model   ->select('page_id', 'content', 'audio_url')
-                                    ->whereIn('page_id', $pageIds)
-                                    ->get()
-                                    ->groupBy('page_id');
+        $path = '';
+        if(is_file($sentence['audio'])) {
+            $path = 'audios/'.$storyId.'/'.$pageId.'/'.time().'_'.$sentence['audio']->getClientOriginalName();
+            Storage::disk('public')->put($path, file_get_contents($sentence['audio']));
+        } else {
+            $path = $sentence['audio'];
+        }
 
-        return $sentences;
+        $newSentence = $this->model->create([
+            'content' => $sentence['content'],
+            'audio_url' => $path,
+        ]);
+
+        return $newSentence->id;
     }
 
-    public function storeContentAndCreateSentence($storyId, $pageId, $sentences)
+    public function deleteContentAndSentence($sentenceId)
     {
-        foreach($sentences as $sentence) {
-            $path = '';
-            if(is_file($sentence['audio'])) {
-                $path = 'audios/'.$storyId.'/'.$pageId.'/'.'sentence/'.time().'_'.$sentence['audio']->getClientOriginalName();
-                Storage::disk('public')->put($path, file_get_contents($sentence['audio']));
-            } else {
-                $path = $sentence['audio'];
-            }
+        $sentence = $this->model->find($sentenceId);
 
-            $this->model->create([
-                'page_id' => $pageId,
-                'content' => $sentence['content'],
-                'audio_url' => $path,
-            ]);
+        if(!$sentence) {
+            return false;
         }
+
+        Storage::disk('public')->delete($sentence->audio_url);
+
+        $sentence->delete();
 
         return true;
     }

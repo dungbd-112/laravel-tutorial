@@ -16,6 +16,8 @@ class Story extends Model
      */
     protected $fillable = [
         'title',
+        'thumbnail_url',
+        'bonus',
         'created_user',
     ];
 
@@ -25,6 +27,14 @@ class Story extends Model
      * @var array<int, string>
      */
     protected $hidden = [];
+
+    /**
+     * Get the user that created the story.
+    */
+    public function created_user()
+    {
+        return $this->belongsTo(User::class, 'created_user', 'id');
+    }
 
     /*
     * Get the pages for the story.

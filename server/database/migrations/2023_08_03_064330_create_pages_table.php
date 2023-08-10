@@ -15,8 +15,8 @@ class CreatePagesTable extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('page_number');
             $table->unsignedBigInteger('story_id');
+            $table->string('background_url');
             $table->timestamps();
         });
     }

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\UserRole;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -22,7 +23,7 @@ class UserSeeder extends Seeder
                 'email' => 'admin@gmail.com',
                 'password' => Hash::make('123456'),
                 'role' => UserRole::Admin,
-            ], 
+            ],
             [
                 'name' => 'Bui Dung',
                 'email' => 'user@gmail.com',
@@ -30,5 +31,6 @@ class UserSeeder extends Seeder
                 'role' => UserRole::User,
             ]
         ]);
+        User::factory(10)->create();
     }
 }
