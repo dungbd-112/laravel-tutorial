@@ -76,7 +76,7 @@ class StoryRepository extends BaseRepository implements StoryRepositoryInterface
     public function createStoryAndContent($request)
     {
         $story = $this->model->create([
-            'title' => $request->title,
+            'title' => $request['title'],
             'created_user' => auth()->user()->id,
         ]);
 
@@ -84,7 +84,7 @@ class StoryRepository extends BaseRepository implements StoryRepositoryInterface
             return [];
         }
 
-        $this->updatePagesContent($story, $request->pages);
+        $this->updatePagesContent($story, $request['pages']);
 
         return $story;
     }
@@ -132,8 +132,16 @@ class StoryRepository extends BaseRepository implements StoryRepositoryInterface
                 'page_number' => $page['page_number'],
             ]);
 
-            $newPage->sentences()->createMany($page['sentences']);
-            $newPage->objects()->createMany($page['objects']);
+            $this->sentenceRepository->storeContentAndCreateSentence(
+                $story->id,
+                $newPage->id,
+                $page['sentences']
+            );
+            $this->objectRepository->storeContentAndCreateObject(
+                $story->id,
+                $newPage->id,
+                $page['objects']
+            );
         }
     }
 }

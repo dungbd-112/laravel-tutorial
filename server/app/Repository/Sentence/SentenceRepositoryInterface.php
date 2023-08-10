@@ -11,4 +11,13 @@ interface SentenceRepositoryInterface extends EloquentRepositoryInterface
      * @param array $pageIds
     */
     public function getSentencesContent($pageIds);
+
+    /**
+     * Store audio and create sentence
+     *
+     * @param string $storyId
+     * @param string $pageId
+     * @param array $sentences
+    */
+    public function storeContentAndCreateSentence($storyId, $pageId, $sentences);
 }

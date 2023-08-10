@@ -12,4 +12,13 @@ interface ObjectRepositoryInterface extends EloquentRepositoryInterface
      * @param array $pageIds
     */
     public function getObjectsContent($pageIds);
+
+    /**
+     * Store object image, audio then create object
+     *
+     * @param int $storyId
+     * @param int $pageId
+     * @param array $objects
+    */
+    public function storeContentAndCreateObject($storyId, $pageId, $objects);
 }

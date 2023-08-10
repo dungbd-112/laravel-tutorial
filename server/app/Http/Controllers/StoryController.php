@@ -48,9 +48,8 @@ class StoryController extends Controller
     public function store(StoreStoryRequest $request): JsonResponse
     {
         $this->authorize('create', Story::class);
-        $request->all();
 
-        $story = $this->storyRepository->createStoryAndContent($request);
+        $story = $this->storyRepository->createStoryAndContent($request->all());
 
         if(!$story) {
             $this->message = 'Create new story failed.';
