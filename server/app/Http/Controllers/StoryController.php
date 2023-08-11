@@ -93,9 +93,8 @@ class StoryController extends Controller
     public function update(UpdateStoryRequest $request, $id): JsonResponse
     {
         $this->authorize('update', Story::class);
-        $request->all();
 
-        $story = $this->storyRepository->updateStoryAndContent($request, $id);
+        $story = $this->storyRepository->updateStoryAndContent($request->all(), $id);
 
         if(!$story) {
             $this->message = 'Story not found.';

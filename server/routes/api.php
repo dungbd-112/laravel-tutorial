@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,3 +31,8 @@ Route::apiResource('users', UserController::class);
 
 /* Story router */
 Route::apiResource('stories', StoryController::class);
+
+/* Show query log for debugging */
+DB::listen(function($query) {
+    var_dump($query->sql);
+});

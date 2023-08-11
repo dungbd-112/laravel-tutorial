@@ -27,7 +27,7 @@ class PageObject extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [];
+    protected $hidden = ['pivot'];
 
     /**
      * Get the objectes for the page.

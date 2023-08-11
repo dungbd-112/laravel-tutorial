@@ -24,17 +24,6 @@ class SentenceConfigRepository extends BaseRepository implements SentenceConfigR
         $this->sentenceRepository = $sentenceRepository;
     }
 
-    public function getSentencesContent($pageIds)
-    {
-        $sentences = $this->model   ->select('page_id', 'sentence_id', 'position')
-                                    ->with('sentence:id,content,audio_url')
-                                    ->whereIn('page_id', $pageIds)
-                                    ->get()
-                                    ->groupBy('page_id');
-
-        return $sentences;
-    }
-
     public function storeContentAndCreatePageSentence($storyId, $pageId, $sentences)
     {
         foreach($sentences as $sentence) {

@@ -44,21 +44,16 @@ class StoryRepository extends BaseRepository implements StoryRepositoryInterface
 
     public function getStoryDetail($id)
     {
-        $story = $this->model   ->with(['pages:id,background_url,story_id', 'created_user:id,name'])
+        $story = $this->model   ->with([
+                                    'pages:id,background_url,story_id',
+                                    'pages.sentences:id,sentence_config.position,content,audio_url',
+                                    'pages.objects:id,content,audio_url,objects.zone',
+                                    'created_user:id,name'
+                                ])
                                 ->find($id);
 
         if(!$story) {
             return [];
-        }
-
-        $pageIds = Arr::pluck($story->pages, 'id');
-
-        $sentences = $this->sentenceConfigRepository->getSentencesContent($pageIds);
-        $objects = $this->objectRepository->getObjectsContent($pageIds);
-
-        foreach($story->pages as $page) {
-            $page->sentences = $sentences[$page->id] ?? [];
-            $page->objects = $objects[$page->id] ?? [];
         }
 
         return $story;
@@ -116,11 +111,21 @@ class StoryRepository extends BaseRepository implements StoryRepositoryInterface
             return false;
         }
 
-        $story->title = $request->title ?? $story->title;
+        $story->title = array_key_exists('title', $request) ? $request['title'] : $story->title;
+        $story->bonus = array_key_exists('bonus', $request) ? $request['bonus'] : $story->bonus;
+
+        if(array_key_exists('thumbnail', $request) && is_file($request['thumbnail'])) {
+            Storage::disk('public')->delete($story->thumbnail_url);
+
+            $thumbnailPath = 'images/'.time().'_'.$request['thumbnail']->getClientOriginalName();
+            Storage::disk('public')->put($thumbnailPath, file_get_contents($request['thumbnail']));
+            $story->thumbnail_url = $thumbnailPath;
+        }
+
         $story->save();
 
-        if($request->pages) {
-            $this->updatePagesContent($story, $request->pages);
+        if(array_key_exists('pages', $request)) {
+            $this->updatePagesContent($story, $request['pages']);
         }
 
         return true;

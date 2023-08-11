@@ -7,13 +7,6 @@ use App\Repository\Eloquent\EloquentRepositoryInterface;
 interface ObjectRepositoryInterface extends EloquentRepositoryInterface
 {
     /**
-     * Get objects content in number of pages
-     *
-     * @param array $pageIds
-    */
-    public function getObjectsContent($pageIds);
-
-    /**
      * Store object image, audio then create object
      *
      * @param int $storyId

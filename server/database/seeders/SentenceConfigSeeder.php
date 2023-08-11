@@ -15,7 +15,7 @@ class SentenceConfigSeeder extends Seeder
     public function run()
     {
         for($page_id = 1; $page_id <= 500; $page_id++) {
-            SentenceConfig::factory(3)->create([
+            SentenceConfig::factory(1)->create([
                 'page_id' => $page_id,
             ]);
         }

@@ -24,7 +24,7 @@ class Page extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [];
+    protected $hidden = ['pivot'];
 
     /**
      * Get page's story.
@@ -39,7 +39,14 @@ class Page extends Model
     */
     public function sentences()
     {
-        return $this->hasManyThrough(Sentence::class, SentenceConfig::class, 'page_id', 'id', 'id', 'sentence_id');
+        return $this->belongsToMany(
+            Sentence::class,
+            SentenceConfig::class,
+            'page_id',
+            'sentence_id',
+            'id',
+            'id'
+        );
     }
 
     /**
@@ -47,6 +54,13 @@ class Page extends Model
     */
     public function objects()
     {
-        return $this->hasManyThrough(Sentence::class, PageObject::class, 'page_id', 'id', 'id', 'sentence_id');
+        return $this->belongsToMany(
+            Sentence::class,
+            PageObject::class,
+            'page_id',
+            'sentence_id',
+            'id',
+            'id'
+        );
     }
 }

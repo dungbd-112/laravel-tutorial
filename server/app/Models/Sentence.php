@@ -24,7 +24,7 @@ class Sentence extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [];
+    protected $hidden = ['pivot'];
 
     /**
      * Get the page for the sentence.

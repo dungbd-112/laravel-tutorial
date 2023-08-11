@@ -27,7 +27,7 @@ class SentenceConfig extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [];
+    protected $hidden = ['pivot'];
 
     /**
      * Get the sentences for the page.

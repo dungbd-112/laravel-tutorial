@@ -25,17 +25,6 @@ class ObjectRepository extends BaseRepository implements ObjectRepositoryInterfa
         $this->sentenceRepository = $sentenceRepository;
     }
 
-    public function getObjectsContent($pageIds)
-    {
-        $objects = $this->model ->select('page_id', 'sentence_id', 'zone')
-                                ->with('sentence:id,content,audio_url')
-                                ->whereIn('page_id', $pageIds)
-                                ->get()
-                                ->groupBy('page_id');
-
-        return $objects;
-    }
-
     public function storeContentAndCreateObject($storyId, $pageId, $objects)
     {
         foreach($objects as $object) {
