@@ -1,3 +1,5 @@
+version: '2.17'
+
 services:
   traefik:
     image: traefik:2.9
@@ -57,6 +59,23 @@ services:
     depends_on:
       - traefik
       - mysql
+
+  client:
+    image: node:18-alpine
+    restart: unless-stopped
+    working_dir: /srv/client
+    tty: true
+    volumes:
+      - ./client:/srv/client
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}-client.rule=Host(`${DOMAIN}`)
+      - traefik.http.services.${COMPOSE_PROJECT_NAME}-client.loadbalancer.server.port=3000
+    links:
+      - server
+    depends_on:
+      - traefik
+      - server
 
 volumes:
   data:
