@@ -1,0 +1,5 @@
+<ng-container *ngIf="data$ | async as data">
+  <ng-container *ngIf="data.currentUser as currentUser">
+    <p>{{ currentUser.name }}</p>
+  </ng-container>
+</ng-container>

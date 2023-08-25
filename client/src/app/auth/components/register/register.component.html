@@ -1,0 +1,59 @@
+<div class="flex h-full w-full items-center justify-center">
+  <div class="min-w-[25rem] rounded-md border border-disabled p-4 shadow">
+    <p class="text-3xl font-semibold">Sign up</p>
+
+    <form nz-form class="w-full" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please enter your name.">
+          <nz-input-group nzPrefixIcon="user">
+            <input type="text" nz-input formControlName="name" placeholder="Name" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Email is required.">
+          <nz-input-group nzPrefixIcon="mail">
+            <input type="text" nz-input formControlName="email" placeholder="Email" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Password is required.">
+          <nz-input-group nzPrefixIcon="lock" [nzSuffix]="toggleShowPassword">
+            <input
+              [type]="isShowPassword ? 'text' : 'password'"
+              nz-input
+              formControlName="password"
+              placeholder="Password"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #toggleShowPassword>
+          <span
+            nz-icon
+            [nzType]="isShowPassword ? 'eye' : 'eye-invisible'"
+            nzTheme="outline"
+            class="cursor-pointer text-noneSelected transition-colors hover:text-black"
+            (click)="isShowPassword = !isShowPassword"
+          ></span>
+        </ng-template>
+      </nz-form-item>
+
+      <button
+        type="submit"
+        class="flex w-full items-center justify-center"
+        nz-button
+        nzType="default"
+      >
+        Sign up
+        <!-- <ng-container *ngIf="!data.isSubmitting">Sign up</ng-container> -->
+        <!-- <span *ngIf="data.isSubmitting" nz-icon nzType="loading" nzTheme="outline"></span> -->
+      </button>
+
+      <br />
+      Already has account? <a class="transition-all hover:underline" routerLink="/login">Login</a>
+    </form>
+  </div>
+</div>

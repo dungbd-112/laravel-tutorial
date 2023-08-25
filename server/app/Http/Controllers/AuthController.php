@@ -14,12 +14,16 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      */
-    public function login(AuthRequest $request): JsonResponse 
+    public function login(AuthRequest $request): JsonResponse
     {
         $credentials = $request->all();
-        
+
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json([
+                'error' => [
+                    'Unauthorized' => ['Invalid email or password.']
+                ]
+            ], 401);
         }
 
         return $this->respondWithToken($token);
@@ -30,7 +34,7 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      */
-    public function me(): JsonResponse 
+    public function me(): JsonResponse
     {
         return response()->json(auth()->user());
     }
@@ -40,7 +44,7 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      */
-    public function logout(): JsonResponse 
+    public function logout(): JsonResponse
     {
         auth()->logout();
 
@@ -52,7 +56,7 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      */
-    public function refresh(): JsonResponse 
+    public function refresh(): JsonResponse
     {
         return $this->respondWithToken(auth()->refresh());
     }
@@ -64,11 +68,11 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      */
-    protected function respondWithToken($token): JsonResponse 
+    protected function respondWithToken($token): JsonResponse
     {
         return response()->json([
-            'access_token' => $token,
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'user' => auth()->user(),
+            'accessToken' => $token,
         ]);
     }
 }

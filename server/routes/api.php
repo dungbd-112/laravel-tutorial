@@ -33,6 +33,6 @@ Route::apiResource('users', UserController::class);
 Route::apiResource('stories', StoryController::class);
 
 /* Show query log for debugging */
-DB::listen(function($query) {
-    var_dump($query->sql);
-});
+// DB::listen(function($query) {
+//     var_dump($query->sql);
+// });
