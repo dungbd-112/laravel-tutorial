@@ -15,6 +15,7 @@ module.exports = {
       completed: '#B5F5EC',
       bgSecondary: '#F0F0F0',
       bgDefault: '#FFFFFF',
+      white: '#FFFFFF',
       black: '#000000',
       danger: '#FF7875',
       dragging: '#BAE7FF',

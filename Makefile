@@ -16,8 +16,8 @@ devup:
 
 devinstall:
 	@docker exec -it ${COMPOSE_PROJECT_NAME}-client-1 npm install -g @angular/cli && docker exec -it ${COMPOSE_PROJECT_NAME}-client-1 npm install
-	# @docker exec -it ${COMPOSE_PROJECT_NAME}-server-1 composer install
-	# @if not exist server\.env (copy server\.env.example server\.env && docker exec -it ${COMPOSE_PROJECT_NAME}-server-1 php artisan key:generate && docker exec -it ${COMPOSE_PROJECT_NAME}-server-1 php artisan jwt:secret)
+	@docker exec -it ${COMPOSE_PROJECT_NAME}-server-1 composer install
+	@if not exist server\.env (copy server\.env.example server\.env && docker exec -it ${COMPOSE_PROJECT_NAME}-server-1 php artisan key:generate && docker exec -it ${COMPOSE_PROJECT_NAME}-server-1 php artisan jwt:secret)
 
 devfresh:
 	docker exec -it ${COMPOSE_PROJECT_NAME}-server-1 php artisan migrate:fresh --seed

@@ -1,5 +1,18 @@
-<ng-container *ngIf="data$ | async as data">
-  <ng-container *ngIf="data.currentUser as currentUser">
-    <p>{{ currentUser.name }}</p>
-  </ng-container>
+<ng-container *ngIf="stories$ | async as stories">
+  <app-default-layout>
+    <div class="grid w-full grid-cols-5 gap-4">
+      <div
+        *ngFor="let story of stories"
+        class="cursor-pointer rounded-md border border-disabled shadow transition-shadow hover:shadow-lg"
+      >
+        <img
+          [src]="story.thumbnail"
+          alt="thumbnail"
+          class="aspect-square w-full rounded-t-md object-cover"
+        />
+
+        <div class="px-2 py-1 text-center text-lg font-medium">{{ story.title }}</div>
+      </div>
+    </div>
+  </app-default-layout>
 </ng-container>

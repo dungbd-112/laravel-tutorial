@@ -31,7 +31,7 @@ class Story extends Model
     /**
      * Get the user that created the story.
     */
-    public function created_user()
+    public function author()
     {
         return $this->belongsTo(User::class, 'created_user', 'id');
     }

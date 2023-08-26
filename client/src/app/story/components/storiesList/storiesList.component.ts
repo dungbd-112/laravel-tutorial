@@ -1,17 +1,20 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store'
-import { combineLatest } from 'rxjs'
-import { selectCurrentUser } from 'src/app/auth/store/reducers'
+
 import { AuthStateInterface } from 'src/app/auth/types/authState.interface'
+import { selectStories } from '../../store/reducers'
+import { storyActions } from '../../store/actions'
 
 @Component({
   selector: 'app-stories-list',
   templateUrl: './storiesList.component.html'
 })
-export class StoriesListComponent {
-  data$ = combineLatest({
-    currentUser: this.store.select(selectCurrentUser)
-  })
+export class StoriesListComponent implements OnInit {
+  stories$ = this.store.select(selectStories)
 
   constructor(private store: Store<{ auth: AuthStateInterface }>) {}
+
+  ngOnInit(): void {
+    this.store.dispatch(storyActions.getStories())
+  }
 }

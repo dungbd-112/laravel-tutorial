@@ -28,7 +28,7 @@ class StoryController extends Controller
     {
         $stories = $this->storyRepository->searchByTitle($request);
 
-        if(!isset($stories) || $stories->isEmpty()) {
+        if(!isset($stories)) {
             $this->message = 'No story found.';
             goto next;
         }

@@ -6,15 +6,27 @@ use App\Models\Story;
 use App\Repository\Eloquent\BaseRepository;
 use App\Repository\Object\ObjectRepositoryInterface;
 use App\Repository\SentenceConfig\SentenceConfigRepositoryInterface;
+use App\Transformers\StoryTransformer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use League\Fractal\Manager;
+use League\Fractal\Resource\Collection;
 
 class StoryRepository extends BaseRepository implements StoryRepositoryInterface
 {
     public ObjectRepositoryInterface $objectRepository;
 
     public SentenceConfigRepositoryInterface $sentenceConfigRepository;
+
+    /**
+     * @var Manager
+     */
+    private $fractal;
+
+    /**
+     * @var UserTransformer
+     */
+    private $storyTransformer;
 
     /**
      * constructor.
@@ -24,22 +36,29 @@ class StoryRepository extends BaseRepository implements StoryRepositoryInterface
     public function __construct(
         Story $model,
         ObjectRepositoryInterface $objectRepository,
-        SentenceConfigRepositoryInterface $sentenceConfigRepository
+        SentenceConfigRepositoryInterface $sentenceConfigRepository,
+        Manager $fractal,
+        StoryTransformer $storyTransformer
     )
     {
         parent::__construct($model);
         $this->objectRepository = $objectRepository;
         $this->sentenceConfigRepository = $sentenceConfigRepository;
+        $this->fractal = $fractal;
+        $this->storyTransformer = $storyTransformer;
     }
 
     public function searchByTitle(Request $request)
     {
-        $story = $this->model   ->where('title', 'like', '%'.$request->title.'%')
-                                ->with('created_user:id,name')
+        $stories = $this->model   ->where('title', 'like', '%'.$request->title.'%')
+                                ->with('author:id,name')
                                 ->get()
                                 ->sortByDesc('created_at');
 
-        return $story;
+        $stories = new Collection($stories, $this->storyTransformer);
+        $stories = $this->fractal->createData($stories);
+
+        return $stories->toArray()['data'];
     }
 
     public function getStoryDetail($id)
@@ -48,7 +67,7 @@ class StoryRepository extends BaseRepository implements StoryRepositoryInterface
                                     'pages:id,background_url,story_id',
                                     'pages.sentences:id,sentence_config.position,content,audio_url',
                                     'pages.objects:id,content,audio_url,objects.zone',
-                                    'created_user:id,name'
+                                    'author:id,name'
                                 ])
                                 ->find($id);
 
