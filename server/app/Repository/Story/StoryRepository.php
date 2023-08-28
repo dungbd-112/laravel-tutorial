@@ -6,6 +6,7 @@ use App\Models\Story;
 use App\Repository\Eloquent\BaseRepository;
 use App\Repository\Object\ObjectRepositoryInterface;
 use App\Repository\SentenceConfig\SentenceConfigRepositoryInterface;
+use App\Transformers\DataSerializer;
 use App\Transformers\StoryTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -44,13 +45,14 @@ class StoryRepository extends BaseRepository implements StoryRepositoryInterface
         parent::__construct($model);
         $this->objectRepository = $objectRepository;
         $this->sentenceConfigRepository = $sentenceConfigRepository;
+        $fractal->setSerializer(new DataSerializer);
         $this->fractal = $fractal;
         $this->storyTransformer = $storyTransformer;
     }
 
     public function searchByTitle(Request $request)
     {
-        $stories = $this->model   ->where('title', 'like', '%'.$request->title.'%')
+        $stories = $this->model ->where('title', 'like', '%'.$request->title.'%')
                                 ->with('author:id,name')
                                 ->get()
                                 ->sortByDesc('created_at');
@@ -58,24 +60,33 @@ class StoryRepository extends BaseRepository implements StoryRepositoryInterface
         $stories = new Collection($stories, $this->storyTransformer);
         $stories = $this->fractal->createData($stories);
 
-        return $stories->toArray()['data'];
+        return $stories->toArray();
     }
 
     public function getStoryDetail($id)
     {
-        $story = $this->model   ->with([
+        $story = $this->model   ->where('id', $id)
+                                ->with([
                                     'pages:id,background_url,story_id',
                                     'pages.sentences:id,sentence_config.position,content,audio_url',
                                     'pages.objects:id,content,audio_url,objects.zone',
                                     'author:id,name'
                                 ])
-                                ->find($id);
+                                ->get();
 
         if(!$story) {
             return [];
         }
 
-        return $story;
+        $story = new Collection($story, $this->storyTransformer);
+        $story = $this->fractal ->parseIncludes([
+                                    'pages',
+                                    'pages.sentences',
+                                    'pages.objects'
+                                ])
+                                ->createData($story);
+
+        return $story->toArray()[0];
     }
 
     public function deleteStoryAndContent($id)

@@ -7,6 +7,15 @@ use League\Fractal\TransformerAbstract;
 
 class StoryTransformer extends TransformerAbstract
 {
+    /**
+     * List of resources possible to include
+     *
+     * @var array
+     */
+    protected array $availableIncludes = [
+        'pages',
+    ];
+
     public function transform(Story $story)
     {
         return [
@@ -18,5 +27,12 @@ class StoryTransformer extends TransformerAbstract
             'createdAt' => $story->created_at->format('Y-m-d'),
             'updatedAt' => $story->updated_at->format('Y-m-d'),
         ];
+    }
+
+    public function includePages(Story $story)
+    {
+        $pages = $story->pages;
+
+        return $this->collection($pages, new PageTransformer);
     }
 }
