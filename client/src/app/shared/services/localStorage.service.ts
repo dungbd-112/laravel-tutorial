@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core'
 @Injectable({
   providedIn: 'root'
 })
-export class PersitenceService {
+export class LocalStorageService {
   set(key: string, data: any): void {
     try {
       localStorage.setItem(key, JSON.stringify(data))
@@ -21,6 +21,14 @@ export class PersitenceService {
     } catch (error) {
       console.error('Error getting data from localStorage', error)
       return null
+    }
+  }
+
+  remove(key: string): void {
+    try {
+      localStorage.removeItem(key)
+    } catch (error) {
+      console.error('Error removing data from localStorage', error)
     }
   }
 }

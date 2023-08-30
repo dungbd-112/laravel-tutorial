@@ -1,0 +1,31 @@
+<div class="relative h-screen w-screen overflow-hidden">
+  <canvas #rootCanvas class="h-full w-full" width="1920" height="1024"></canvas>
+
+  <button
+    *ngIf="currentPage !== 0"
+    nz-tooltip
+    nzTooltipTitle="Previous page"
+    class="absolute left-8 top-[47vh] text-3xl transition-colors hover:text-primary-5"
+    (click)="prevPage()"
+  >
+    <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
+  </button>
+
+  <button
+    nz-tooltip
+    nzTooltipTitle="Next page"
+    class="absolute right-8 top-[47vh] text-3xl transition-colors hover:text-primary-5"
+    (click)="nextPage()"
+  >
+    <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+  </button>
+
+  <button
+    nz-tooltip
+    nzTooltipTitle="Stop reading"
+    class="absolute right-8 top-4 text-3xl text-dust-red-2 transition-colors hover:text-dust-red-5"
+    routerLink=".."
+  >
+    <span nz-icon nzType="close-circle" nzTheme="outline"></span>
+  </button>
+</div>

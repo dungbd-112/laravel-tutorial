@@ -6,6 +6,9 @@ export const storyActions = createActionGroup({
   events: {
     'Get stories': emptyProps(),
     'Get stories success': props<{ stories: StoryInterface[] }>(),
-    'Get stories failure': emptyProps()
+    'Get stories failure': emptyProps(),
+    'Get story detail': props<{ id: string }>(),
+    'Get story detail success': props<{ story: StoryInterface }>(),
+    'Get story detail failure': emptyProps()
   }
 })

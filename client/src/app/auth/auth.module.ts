@@ -13,6 +13,7 @@ import { LoginComponent } from './components/login/login.component'
 import { RegisterComponent } from './components/register/register.component'
 import { authFeatureKey, authReducer } from './store/reducers'
 import * as authEffects from './store/effects'
+import { AuthLayoutComponent } from '../shared/modules/authLayout/authLayout.component'
 
 @NgModule({
   declarations: [RegisterComponent, LoginComponent],
@@ -25,7 +26,8 @@ import * as authEffects from './store/effects'
     NzButtonModule,
     NzIconModule,
     StoreModule.forFeature(authFeatureKey, authReducer),
-    EffectsModule.forFeature([authEffects])
+    EffectsModule.forFeature([authEffects]),
+    AuthLayoutComponent
   ]
 })
 export class AuthModule {}

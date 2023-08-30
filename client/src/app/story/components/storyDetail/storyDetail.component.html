@@ -1,0 +1,45 @@
+<ng-container *ngIf="data$ | async as data">
+  <app-default-layout [isLoading]="data.isLoading">
+    <div
+      *ngIf="data.story as story"
+      class="grid max-h-content min-h-content grid-cols-2 gap-4 overflow-hidden"
+    >
+      <div>
+        <nz-carousel nzAutoPlay nzEffect="fade" class="h-content">
+          <div nz-carousel-content class="flex items-center justify-center">
+            <img [src]="story.thumbnail" class="h-content rounded-md object-contain" />
+          </div>
+
+          <div nz-carousel-content *ngFor="let page of story.pages">
+            <img [src]="page.background" class="h-content rounded-md object-contain" />
+          </div>
+        </nz-carousel>
+      </div>
+
+      <!-- Story detail -->
+      <div>
+        <button
+          class="flex items-center justify-center gap-1 text-base font-medium transition-colors hover:text-primary-5"
+          routerLink=".."
+        >
+          <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
+          <p>Back</p>
+        </button>
+
+        <div class="mt-2">
+          <app-detail-item title="Title" [content]="story.title"></app-detail-item>
+
+          <app-detail-item title="Bonus" [content]="story.bonus"></app-detail-item>
+
+          <app-detail-item title="Created by" [content]="story.createdUser.name"></app-detail-item>
+
+          <app-detail-item title="Created at" [content]="story.createdAt"></app-detail-item>
+
+          <app-detail-item title="Last modified at" [content]="story.updatedAt"></app-detail-item>
+        </div>
+
+        <button nz-button nzType="default" routerLink="read">Start reading</button>
+      </div>
+    </div>
+  </app-default-layout>
+</ng-container>

@@ -2,7 +2,17 @@
 module.exports = {
   content: ['./src/**/*.{html,ts}'],
   theme: {
-    extend: {},
+    extend: {
+      height: {
+        content: 'calc(100vh - 4rem)'
+      },
+      minHeight: {
+        content: 'calc(100vh - 4rem)'
+      },
+      maxHeight: {
+        content: 'calc(100vh - 4rem)'
+      }
+    },
     colors: {
       noneSelected: 'rgba(0, 0, 0, 0.45)',
       borderHover: 'rgba(0, 0, 0, 0.65)',

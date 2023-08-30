@@ -1,17 +1,27 @@
-<ng-container *ngIf="stories$ | async as stories">
-  <app-default-layout>
+<ng-container *ngIf="data$ | async as data">
+  <app-default-layout [isLoading]="data.isLoading">
     <div class="grid w-full grid-cols-5 gap-4">
       <div
-        *ngFor="let story of stories"
-        class="cursor-pointer rounded-md border border-disabled shadow transition-shadow hover:shadow-lg"
+        *ngFor="let story of data.stories"
+        class="relative rounded-md ring-1 transition-shadow hover:shadow-xl"
       >
-        <img
-          [src]="story.thumbnail"
-          alt="thumbnail"
-          class="aspect-square w-full rounded-t-md object-cover"
-        />
+        <div class="h-full w-full cursor-pointer" routerLink="/stories/{{ story.id }}">
+          <img
+            [src]="story.thumbnail"
+            alt="thumbnail"
+            class="aspect-square w-full rounded-t-md object-cover"
+          />
 
-        <div class="px-2 py-1 text-center text-lg font-medium">{{ story.title }}</div>
+          <div class="px-3 py-2">
+            <p class="max-w-[8rem] truncate text-lg font-medium">{{ story.title }}</p>
+          </div>
+        </div>
+
+        <button
+          class="absolute bottom-3 right-3 text-lg text-noneSelected transition-transform hover:scale-125 active:scale-150"
+        >
+          <span nz-icon nzType="heart" nzTheme="outline"></span>
+        </button>
       </div>
     </div>
   </app-default-layout>

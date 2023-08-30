@@ -8,13 +8,13 @@ import { NzMessageService } from 'ng-zorro-antd/message'
 import { authActions } from './actions'
 import { AuthService } from '../services/auth.service'
 import { LoginResponseInterface } from '../types/loginResponse.interface'
-import { PersitenceService } from 'src/app/shared/services/persitence.service'
+import { LocalStorageService } from 'src/app/shared/services/localStorage.service'
 
 export const loginEffect = createEffect(
   (
     actions$ = inject(Actions),
     authService = inject(AuthService),
-    presitenceService = inject(PersitenceService),
+    localStorageService = inject(LocalStorageService),
     message = inject(NzMessageService)
   ) => {
     return actions$.pipe(
@@ -22,7 +22,7 @@ export const loginEffect = createEffect(
       switchMap(({ request }) => {
         return authService.login(request).pipe(
           map((response: LoginResponseInterface) => {
-            presitenceService.set('accessToken', response.accessToken)
+            localStorageService.set('accessToken', response.accessToken)
             return authActions.loginSuccess({ currentUser: response.user })
           }),
 
@@ -54,19 +54,42 @@ export const loginSuccessEffect = createEffect(
 )
 
 export const getCurrentUserEffect = createEffect(
-  (actions$ = inject(Actions), authService = inject(AuthService)) => {
+  (actions$ = inject(Actions), authService = inject(AuthService), router = inject(Router)) => {
     return actions$.pipe(
       ofType(authActions.getCurrentUser),
       switchMap(() => {
         return authService.getCurrentUser().pipe(
           map(currentUser => {
             return authActions.getCurrentUserSuccess({ currentUser })
+          }),
+
+          catchError(() => {
+            return of(authActions.getCurrentUserFailure())
           })
         )
       })
     )
   },
   { functional: true }
+)
+
+export const getCurrentUserFailureEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    router = inject(Router),
+    localStorageService = inject(LocalStorageService),
+    message = inject(NzMessageService)
+  ) => {
+    return actions$.pipe(
+      ofType(authActions.getCurrentUserFailure),
+      tap(() => {
+        message.info('Your login session has expired. Please login again.')
+        localStorageService.remove('accessToken')
+        router.navigateByUrl('/login')
+      })
+    )
+  },
+  { functional: true, dispatch: false }
 )
 
 export const registerEffect = createEffect(

@@ -5,6 +5,8 @@ import { Store } from '@ngrx/store'
 import { RegisterRequestInterface } from '../../types/registerRequest.interface'
 import { AuthStateInterface } from '../../types/authState.interface'
 import { authActions } from '../../store/actions'
+import { combineLatest } from 'rxjs'
+import { selectIsSubmitting } from '../../store/reducers'
 
 @Component({
   selector: 'app-register',
@@ -15,6 +17,10 @@ export class RegisterComponent {
     name: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]]
+  })
+
+  data$ = combineLatest({
+    isSubmitting: this.store.select(selectIsSubmitting)
   })
 
   isShowPassword: boolean = false

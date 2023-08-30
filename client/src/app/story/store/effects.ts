@@ -1,12 +1,12 @@
 import { inject } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { catchError, map, switchMap } from 'rxjs'
-import { HttpErrorResponse } from '@angular/common/http'
+import { map, switchMap } from 'rxjs'
 import { NzMessageService } from 'ng-zorro-antd/message'
 
 import { StoryService } from '../services/story.service'
-import { StoriesResponseInterface } from '../types/response.interface'
 import { storyActions } from './actions'
+import { ApiResponseInterface } from 'src/app/shared/types/apiResponse.interface'
+import { StoryInterface } from '../types/story.interface'
 
 export const getStoriesEffect = createEffect(
   (
@@ -18,8 +18,24 @@ export const getStoriesEffect = createEffect(
       ofType(storyActions.getStories),
       switchMap(() => {
         return storyService.getStories().pipe(
-          map((response: StoriesResponseInterface) => {
+          map((response: ApiResponseInterface<StoryInterface[]>) => {
             return storyActions.getStoriesSuccess({ stories: response.data })
+          })
+        )
+      })
+    )
+  },
+  { functional: true }
+)
+
+export const getStoryDetailEffect = createEffect(
+  (actions$ = inject(Actions), storyService = inject(StoryService)) => {
+    return actions$.pipe(
+      ofType(storyActions.getStoryDetail),
+      switchMap(({ id }) => {
+        return storyService.getStoryDetail(id).pipe(
+          map((response: ApiResponseInterface<StoryInterface>) => {
+            return storyActions.getStoryDetailSuccess({ story: response.data })
           })
         )
       })

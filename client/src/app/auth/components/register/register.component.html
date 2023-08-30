@@ -1,8 +1,8 @@
-<div class="flex h-full w-full items-center justify-center">
-  <div class="min-w-[25rem] rounded-md border border-disabled p-4 shadow">
-    <p class="text-3xl font-semibold">Sign up</p>
+<ng-container *ngIf="data$ | async as data">
+  <app-auth-layout>
+    <p class="text-2xl font-semibold">Get started</p>
 
-    <form nz-form class="w-full" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form nz-form class="mt-2 w-full" [formGroup]="form" (ngSubmit)="onSubmit()">
       <nz-form-item>
         <nz-form-control nzErrorTip="Please enter your name.">
           <nz-input-group nzPrefixIcon="user">
@@ -42,18 +42,18 @@
       </nz-form-item>
 
       <button
+        [disabled]="data.isSubmitting"
         type="submit"
         class="flex w-full items-center justify-center"
         nz-button
         nzType="default"
       >
-        Sign up
-        <!-- <ng-container *ngIf="!data.isSubmitting">Sign up</ng-container> -->
-        <!-- <span *ngIf="data.isSubmitting" nz-icon nzType="loading" nzTheme="outline"></span> -->
+        <ng-container *ngIf="!data.isSubmitting">Sign up</ng-container>
+        <span *ngIf="data.isSubmitting" nz-icon nzType="loading" nzTheme="outline"></span>
       </button>
 
       <br />
       Already has account? <a class="transition-all hover:underline" routerLink="/login">Login</a>
     </form>
-  </div>
-</div>
+  </app-auth-layout>
+</ng-container>

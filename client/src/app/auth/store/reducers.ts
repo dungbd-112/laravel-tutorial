@@ -45,7 +45,8 @@ const authFeature = createFeature({
     on(
       authActions.getCurrentUser,
       (state): AuthStateInterface => ({
-        ...state
+        ...state,
+        isSubmitting: true
       })
     ),
 
@@ -53,8 +54,17 @@ const authFeature = createFeature({
       authActions.getCurrentUserSuccess,
       (state, action): AuthStateInterface => ({
         ...state,
+        isSubmitting: false,
         isLoggedIn: true,
         currentUser: action.currentUser
+      })
+    ),
+
+    on(
+      authActions.getCurrentUserFailure,
+      (state): AuthStateInterface => ({
+        ...state,
+        isSubmitting: false
       })
     ),
 
