@@ -17,12 +17,13 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   if (!token || token === '') return router.parseUrl('/login')
 
-  store.dispatch(authActions.getCurrentUser())
-
   return store.select(selectIsLoggedIn).pipe(
     map(isLoggedIn => {
-      console.log('isLoggedIn', isLoggedIn)
-      if (!isLoggedIn) return true
+      if (!isLoggedIn) {
+        store.dispatch(authActions.getCurrentUser())
+        return true
+      }
+
       return true
     })
   )

@@ -1,33 +1,20 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, ViewChild } from '@angular/core'
 import { Store } from '@ngrx/store'
 
 import { StoryStateInterface } from '../../types/storyState.interface'
-import { storyActions } from '../../store/actions'
-import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'app-story-read',
   templateUrl: './storyRead.component.html'
 })
-export class StoryReadComponent implements OnInit, AfterViewInit {
+export class StoryReadComponent implements AfterViewInit {
   story$ = this.store.select(store => store.story.story)
 
   @ViewChild('rootCanvas', { static: false }) rootCanvas: any
 
   currentPage = 0
 
-  constructor(
-    private activeRoute: ActivatedRoute,
-    private store: Store<{ story: StoryStateInterface }>
-  ) {}
-
-  ngOnInit(): void {
-    this.activeRoute.params.subscribe(params => {
-      const storyId = params['id']
-
-      this.store.dispatch(storyActions.getStoryDetail({ id: storyId }))
-    })
-  }
+  constructor(private store: Store<{ story: StoryStateInterface }>) {}
 
   ngAfterViewInit(): void {
     this.drawBackground()

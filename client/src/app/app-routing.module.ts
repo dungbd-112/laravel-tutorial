@@ -11,6 +11,10 @@ const routes: Routes = [
     path: 'stories',
     loadChildren: () => import('./story/story.module').then(m => m.StoryModule),
     canActivate: [authGuard]
+  },
+  {
+    path: '**',
+    redirectTo: 'stories'
   }
 ]
 
