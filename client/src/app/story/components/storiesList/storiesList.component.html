@@ -1,5 +1,11 @@
 <ng-container *ngIf="data$ | async as data">
   <app-default-layout [isLoading]="data.isLoading">
+    <div *ngIf="data.currentUser as currentUser" class="mb-2 flex w-full items-center justify-end">
+      <button *ngIf="currentUser.role === 0" nz-button nzType="default" routerLink="create">
+        Create Story
+      </button>
+    </div>
+
     <div class="grid w-full grid-cols-5 gap-4">
       <div
         *ngFor="let story of data.stories"

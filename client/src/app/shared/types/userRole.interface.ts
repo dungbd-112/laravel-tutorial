@@ -1,5 +1,5 @@
 export type Role = 'Admin' | 'User'
 
-export interface UserRole {
-  [key: number]: Role
+export type UserRoleType = {
+  [key in Role]: number
 }

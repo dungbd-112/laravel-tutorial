@@ -14,6 +14,7 @@ export const authActions = createActionGroup({
     'Get current user success': props<{ currentUser: CurrentUserInterface }>(),
     'Get current user failure': emptyProps(),
     Register: props<{ request: RegisterRequestInterface }>(),
-    'Register submit done': emptyProps()
+    'Register submit done': emptyProps(),
+    Logout: emptyProps()
   }
 })

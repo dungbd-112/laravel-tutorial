@@ -16,6 +16,7 @@ import { NzMessageModule } from 'ng-zorro-antd/message'
 import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
 import { RequestInterceptor } from './request.interceptor'
+import { AuthModule } from './auth/auth.module'
 
 registerLocaleData(en)
 
@@ -28,6 +29,7 @@ registerLocaleData(en)
     HttpClientModule,
     BrowserAnimationsModule,
     NzMessageModule,
+    AuthModule,
     StoreModule.forRoot({}, {}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     EffectsModule.forRoot([])

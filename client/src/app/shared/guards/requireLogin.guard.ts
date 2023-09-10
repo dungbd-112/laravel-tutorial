@@ -8,11 +8,13 @@ import { authActions } from 'src/app/auth/store/actions'
 import { selectIsLoggedIn } from 'src/app/auth/store/reducers'
 import { AuthStateInterface } from 'src/app/auth/types/authState.interface'
 
-export const authGuard: CanActivateFn = (route, state) => {
-  const router = inject(Router)
-  const store = inject(Store<{ auth: AuthStateInterface }>)
-  const authService = inject(AuthService)
-
+export const requireLoginGuard: CanActivateFn = (
+  route,
+  state,
+  router = inject(Router),
+  store = inject(Store<{ auth: AuthStateInterface }>),
+  authService = inject(AuthService)
+) => {
   const token = authService.getCurrentToken()
 
   if (!token || token === '') return router.parseUrl('/login')

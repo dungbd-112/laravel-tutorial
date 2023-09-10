@@ -46,7 +46,7 @@ export const loginSuccessEffect = createEffect(
       ofType(authActions.loginSuccess),
       tap(() => {
         message.create('success', 'Login successfully!')
-        router.navigateByUrl('/stories')
+        router.navigateByUrl('/')
       })
     )
   },
@@ -121,4 +121,23 @@ export const registerEffect = createEffect(
     )
   },
   { functional: true }
+)
+
+export const logoutEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    router = inject(Router),
+    authService = inject(AuthService),
+    message = inject(NzMessageService)
+  ) => {
+    return actions$.pipe(
+      ofType(authActions.logout),
+      tap(() => {
+        authService.logout()
+        message.success('Logout successfully!')
+        router.navigateByUrl('/login')
+      })
+    )
+  },
+  { functional: true, dispatch: false }
 )

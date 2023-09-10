@@ -82,6 +82,14 @@ const authFeature = createFeature({
         ...state,
         isSubmitting: false
       })
+    ),
+
+    on(
+      authActions.logout,
+      (state): AuthStateInterface => ({
+        ...state,
+        ...initalState
+      })
     )
   )
 })

@@ -13,7 +13,7 @@ export interface StoryInterface {
 }
 
 export interface PageInterface {
-  id: number
+  id?: number
   background: string
   sentences: SentenceInterface[]
   objects: ObjectInterface[]

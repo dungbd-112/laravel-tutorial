@@ -5,9 +5,22 @@
     <img src="../../../../assets/logo.svg" alt="logo" class="h-8 object-contain" />
 
     <button
+      nz-dropdown
+      nzTrigger="click"
+      [nzDropdownMenu]="accountInfo"
       class="flex h-full items-center justify-center rounded bg-dust-red-2 px-2 text-base font-semibold transition-colors hover:bg-dust-red-5 hover:text-white"
     >
       {{ currentUser.name }}
     </button>
+
+    <nz-dropdown-menu #accountInfo="nzDropdownMenu">
+      <ul nz-menu class="rounded-md p-3">
+        <li nz-menu-item class="flex items-center justify-start gap-2" (click)="logout()">
+          <span nz-icon nzType="logout" nzTheme="outline"></span>
+          <p>Log out</p>
+        </li>
+        <p class="mt-1 text-sm font-medium opacity-30">thdeathz · © 2023</p>
+      </ul>
+    </nz-dropdown-menu>
   </div>
 </ng-container>

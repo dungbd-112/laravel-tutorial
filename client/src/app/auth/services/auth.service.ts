@@ -36,4 +36,10 @@ export class AuthService {
     const url = environment.apiBaseUrl + '/auth/register'
     return this.http.post(url, data)
   }
+
+  logout(): void {
+    const url = environment.apiBaseUrl + '/auth/logout'
+    this.http.post(url, {})
+    this.localStorageService.remove('accessToken')
+  }
 }

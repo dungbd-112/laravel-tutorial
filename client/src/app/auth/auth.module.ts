@@ -8,12 +8,12 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { EffectsModule } from '@ngrx/effects'
 import { StoreModule } from '@ngrx/store'
 
-import { AuthRoutingModule } from './auth-routing.module'
 import { LoginComponent } from './components/login/login.component'
 import { RegisterComponent } from './components/register/register.component'
 import { authFeatureKey, authReducer } from './store/reducers'
 import * as authEffects from './store/effects'
 import { AuthLayoutComponent } from '../shared/modules/authLayout/authLayout.component'
+import { AuthRoutingModule } from './auth-routing.module'
 
 @NgModule({
   declarations: [RegisterComponent, LoginComponent],

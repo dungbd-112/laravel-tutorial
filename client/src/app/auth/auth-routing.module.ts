@@ -3,20 +3,18 @@ import { NgModule } from '@angular/core'
 
 import { RegisterComponent } from './components/register/register.component'
 import { LoginComponent } from './components/login/login.component'
+import { publicRouteGuard } from '../shared/guards/publicRoute.guard'
 
 const routes: Routes = [
   {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [publicRouteGuard]
   },
   {
     path: 'login',
-    component: LoginComponent
-  },
-  {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
+    component: LoginComponent,
+    canActivate: [publicRouteGuard]
   }
 ]
 

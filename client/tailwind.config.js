@@ -14,7 +14,7 @@ module.exports = {
       }
     },
     colors: {
-      noneSelected: 'rgba(0, 0, 0, 0.45)',
+      unselect: 'rgba(0, 0, 0, 0.45)',
       borderHover: 'rgba(0, 0, 0, 0.65)',
       disabled: 'rgba(0, 0, 0, 0.25)',
       borderLine: 'rgba(0, 0, 0, 0.05)',

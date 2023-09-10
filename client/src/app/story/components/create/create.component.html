@@ -1,0 +1,87 @@
+<app-default-layout>
+  <div class="mb-4 flex w-full items-center justify-between">
+    <button
+      class="flex items-center justify-center gap-1 text-base font-medium transition-colors hover:text-primary-5"
+      routerLink=".."
+    >
+      <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
+      <p>Back</p>
+    </button>
+
+    <p class="text-lg font-medium">Create new story</p>
+  </div>
+
+  <form nz-form>
+    <div class="mb-4 grid w-full grid-cols-2 gap-8">
+      <div class="w-full">
+        <nz-form-item>
+          <nz-form-label [nzSm]="4" nzRequired nzFor="title">Story title</nz-form-label>
+          <nz-form-control nzErrorTip="">
+            <input class="w-full" nz-input formControlName="title" id="title" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSm]="4" nzRequired nzFor="bonus">Bonus</nz-form-label>
+          <nz-form-control nzErrorTip="">
+            <input nz-input formControlName="bonus" id="bonus" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div
+        class="group relative flex h-full min-h-[15rem] w-full cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-disabled transition-colors hover:border-primary-5"
+      >
+        <input
+          type="file"
+          accept="png,jpg,jpeg"
+          class="absolute left-0 top-0 z-10 h-full w-full cursor-pointer opacity-0"
+          (change)="handleChangeImage($event)"
+        />
+
+        <ng-container *ngIf="!currentThumbnail">
+          <span
+            nz-icon
+            nzType="cloud-upload"
+            nzTheme="outline"
+            class="text-unselect text-2xl transition-colors group-hover:text-primary-5"
+          ></span>
+          <p class="text-unselect text-base font-medium">Select story thumbnail</p>
+        </ng-container>
+
+        <ng-container *ngIf="currentThumbnail">
+          <img
+            [src]="currentThumbnail.preview"
+            class="absolute left-0 top-0 h-full w-full object-contain"
+          />
+
+          <div
+            class="absolute left-0 top-0 h-full w-full rounded-md bg-disabled opacity-0 transition-opacity group-hover:opacity-100"
+          ></div>
+        </ng-container>
+      </div>
+    </div>
+
+    <nz-tabset class="">
+      <nz-tab [nzTitle]="addNewTabTitle">
+        <div class="w-full" (contextmenu)="contextMenu($event, menu)">
+          <canvas #newPageCanvas class="h-full w-full" width="1700" height="768"></canvas>
+
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item>Add image</li>
+              <li nz-menu-item>Add action</li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </nz-tab>
+
+      <ng-template #addNewTabTitle>
+        <div class="flex items-center justify-center gap-1">
+          <span nz-icon nzType="plus" nzTheme="outline" class="m-0"></span>
+          <p class="m-0 leading-none">New page</p>
+        </div>
+      </ng-template>
+    </nz-tabset>
+  </form>
+</app-default-layout>

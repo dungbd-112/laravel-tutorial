@@ -5,12 +5,19 @@ import { StoriesListComponent } from './components/storiesList/storiesList.compo
 import { StoryDetailComponent } from './components/storyDetail/storyDetail.component'
 import { StoryReadComponent } from './components/storyRead/storyRead.component'
 import { prefectStoriesGuard, prefectStoryDetailGuard } from './guards/prefect.guard'
+import { CreateComponent } from './components/create/create.component'
+import { requireAdminGuard } from '../shared/guards/requireAdmin.guard'
 
 const routes: Routes = [
   {
     path: '',
     component: StoriesListComponent,
     canActivate: [prefectStoriesGuard]
+  },
+  {
+    path: 'create',
+    component: CreateComponent,
+    canActivate: [requireAdminGuard]
   },
   {
     path: ':id',
@@ -24,7 +31,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/stories'
+    redirectTo: '/'
   }
 ]
 
